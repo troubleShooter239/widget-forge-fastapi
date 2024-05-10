@@ -6,4 +6,4 @@ app = FastAPI()
 
 
 if __name__ == "__main__":
-    run("main:app", reload=True)
+    run("main:app", reload=True, workers=9)
