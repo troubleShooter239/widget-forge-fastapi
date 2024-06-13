@@ -7,7 +7,9 @@ router = APIRouter(prefix='/auth', tags=['auth'])
 
 
 @router.post('/sign_in', response_model=Token)
-async def sign_in(user_schema: SignIn, user_service: user_service_dependency):
+async def sign_in(
+    user_schema: SignIn, user_service: user_service_dependency
+) -> dict[str, str]:
     user = await user_service.authenticate(
         user_schema.email, hashing_service.hash_string(user_schema.password)
     )
@@ -21,8 +23,10 @@ async def sign_in(user_schema: SignIn, user_service: user_service_dependency):
         'token_type': 'bearer'
     }
 
-@router.post('/sign_up')
-async def sign_up(user_schema: SignUp, user_service: user_service_dependency):
+@router.post('/sign_up', response_model=Token)
+async def sign_up(
+    user_schema: SignUp, user_service: user_service_dependency
+) -> dict[str, str]:
     user = await user_service.get_user_by_email(user_schema.email)
     if user is not None:
         raise HTTPException(
@@ -34,4 +38,9 @@ async def sign_up(user_schema: SignUp, user_service: user_service_dependency):
         hashing_service.hash_string(user_schema.password),
         user_schema.widgets
     )
-    return {'access_token': jwt_service.create_access_token(new_user,)}
+    return {
+        'access_token': jwt_service.create_access_token(
+            new_user.email, new_user.id
+        ),
+        'token_type': 'bearer'
+    }

@@ -67,7 +67,7 @@ class UserService:
         return user_id_row[0] if user_id_row is not None else None
     
 
-def get_user_service(db: AsyncSession = db_dependency) -> UserService:
+def get_user_service(db: db_dependency) -> UserService:
     return UserService(db)
 
 user_service_dependency = Annotated[UserService, Depends(get_user_service)]
