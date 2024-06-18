@@ -11,7 +11,7 @@ async def sign_in(
     user_schema: SignIn, user_service: user_service_dependency
 ) -> dict[str, str]:
     user = await user_service.authenticate(
-        user_schema.email, hashing_service.hash_string(user_schema.password)
+        user_schema.email, hashing_service.hash(user_schema.password)
     )
     if user is None:
         raise HTTPException(
@@ -35,7 +35,7 @@ async def sign_up(
     
     new_user = await user_service.create_user(
         user_schema.email, 
-        hashing_service.hash_string(user_schema.password),
+        hashing_service.hash(user_schema.password),
         user_schema.widgets
     )
     return {

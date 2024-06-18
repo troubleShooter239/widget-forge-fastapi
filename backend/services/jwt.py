@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from jose.jwt import encode, decode
 
-from utils.settings import JwtSettings
+from utils.settings import JwtSettings, settings
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/login/token")
 
@@ -36,3 +36,5 @@ class JWTService:
             raise HTTPException(
                 status.HTTP_401_UNAUTHORIZED, detail="Couldn't validate user."
             )
+
+jwt_service = JWTService(settings.jwt)

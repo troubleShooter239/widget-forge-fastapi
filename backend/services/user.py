@@ -1,11 +1,12 @@
 from typing import Annotated
+
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models import User
 from database.db_init import db_dependency
+from database.models import User
 
 
 class UserService:
@@ -13,7 +14,7 @@ class UserService:
         self.db_session = db_session
 
     async def authenticate(
-            self, email: str, hashed_password: str
+        self, email: str, hashed_password: str
     ) -> User | None:
         user = (
             await self.db_session.execute(
