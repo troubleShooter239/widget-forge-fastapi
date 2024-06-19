@@ -9,6 +9,7 @@ engine = create_async_engine(settings.db_connection_string)
 
 session = async_sessionmaker(engine)
 
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
